@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Navigation from "../components/navigation";
 
 export default function Home() {
   return (
@@ -7,6 +8,10 @@ export default function Home() {
         <title>Yoello Brewdog Demo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <main>
+        <Navigation />
+      </main>
     </div>
   );
 }
