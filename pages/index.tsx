@@ -10,11 +10,14 @@ import SwipeableViews from "react-swipeable-views";
 import Head from "next/head";
 import Navigation from "../components/navigation";
 import Display from "../components/display";
+import ProductDisplay from "../components/product";
+import ShoppingCart from "../components/shopping-cart";
+import { GlobalContext } from "../context/global";
 
 const useStyles = makeStyles({
   view: {
     paddingBottom: 10,
-    height: "85vh",
+    height: "100vh",
     "overflow-y": "scroll",
   },
 });
@@ -22,6 +25,7 @@ const useStyles = makeStyles({
 export default function Home() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const { state } = React.useContext(GlobalContext);
 
   const handleChangeIndex = (index: number) => {
     setValue(index);
@@ -41,19 +45,30 @@ export default function Home() {
       </Head>
 
       <Container maxWidth="lg">
-        <Navigation onChange={handleChangeIndex} value={value} />
+        {state.view === null && (
+          <div>
+            <Navigation onChange={handleChangeIndex} value={value} />
 
-        <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
-          <div className={classes.view}>
-            <Display category="pizza" />
+            <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
+              <div className={classes.view}>
+                <Display category="pizza" />
+              </div>
+              <div className={classes.view}>
+                <Display category="steak" />
+              </div>
+              <div className={classes.view}>
+                <Display category="all" />
+              </div>
+            </SwipeableViews>
           </div>
-          <div className={classes.view}>
-            <Display category="steak" />
+        )}
+        {state.view !== null && (
+          <div>
+            <ProductDisplay item={state.view} />
           </div>
-          <div className={classes.view}>
-            <Display category="all" />
-          </div>
-        </SwipeableViews>
+        )}
+
+        <ShoppingCart />
       </Container>
     </div>
   );

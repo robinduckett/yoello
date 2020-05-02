@@ -13,6 +13,7 @@ import { GlobalState } from "../context/reducer";
 import { BeerRecord, BeerParams } from "../interfaces";
 
 import { BeerItem } from "./beer-item";
+import classes from "*.module.css";
 
 function sortBeers({ by, dir }) {
   return function (a: any, b: any) {
@@ -28,8 +29,36 @@ const useStyles = makeStyles({
   items: {
     display: "flex",
     "flex-direction": "column",
+    marginBottom: 10,
+  },
+  buttons: {
+    margin: 10,
   },
 });
+
+const NavigationButtons = ({ onChoose, page, showNext }) => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.buttons}>
+      {page > 1 ? (
+        <Button variant="contained" onClick={() => onChoose(page - 1)}>
+          Prev
+        </Button>
+      ) : (
+        ""
+      )}
+      &nbsp;
+      {showNext ? (
+        <Button variant="contained" onClick={() => onChoose(page + 1)}>
+          Next
+        </Button>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+};
 
 const Display = ({ category }) => {
   const [page, setPage] = React.useState(1);
@@ -38,7 +67,6 @@ const Display = ({ category }) => {
 
   const context = React.useContext(GlobalContext);
   const state: GlobalState = context.state as GlobalState;
-  const dispatch = context.dispatch;
 
   let params: BeerParams = {};
 
@@ -61,6 +89,11 @@ const Display = ({ category }) => {
 
   return (
     <div>
+      <NavigationButtons
+        page={page}
+        showNext={data.length === 25}
+        onChoose={(page) => setPage(page)}
+      />
       <div className={classes.items}>
         {data !== undefined && data.length > 0
           ? data
@@ -70,12 +103,11 @@ const Display = ({ category }) => {
               ))
           : "End of results"}
       </div>
-      {page > 1 ? <Button onClick={() => setPage(page - 1)}>Prev</Button> : ""}
-      {data.length === 25 ? (
-        <Button onClick={() => setPage(page + 1)}>Next</Button>
-      ) : (
-        ""
-      )}
+      <NavigationButtons
+        page={page}
+        showNext={data.length === 25}
+        onChoose={(page: number) => setPage(page)}
+      />
     </div>
   );
 };

@@ -13,13 +13,14 @@ export interface GlobalState {
     by: string;
     dir: string;
   };
+  view: BeerRecord | null;
 }
 
 let storedItems: BeerRecord[];
 
 if (typeof localStorage !== 'undefined') {
   try {
-    storedItems = JSON.parse(localStorage.getItem('cart')) as BeerRecord[];
+    storedItems = JSON.parse(localStorage.getItem('cart')) as BeerRecord[] | [];
   } catch (e) {
     storedItems = [];
   }
@@ -33,12 +34,23 @@ export const initialState: GlobalState = {
     by: 'name',
     dir: 'asc'
   },
+  view: null,
 };
 
 export const reducer = (state: GlobalState, action: GlobalAction) => {
   let cart: GlobalState['cart'];
 
   switch (action.type) {
+    case "view":
+      const view = {
+        view: action.payload
+      };
+
+      return {
+        ...state,
+        ...view
+      };
+
     case "cart_add":
       const cartAdd = {
         cart: {

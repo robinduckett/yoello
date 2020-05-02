@@ -23,7 +23,7 @@ const Navigation = ({ value, onChange }) => {
     <AppBar position="sticky">
       <Tabs value={value} onChange={handleChange} variant="fullWidth">
         {tabs.map((tab) => (
-          <Tab label={tab} />
+          <Tab key={tab} label={tab} />
         ))}
       </Tabs>
     </AppBar>
