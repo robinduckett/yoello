@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -21,6 +22,7 @@
     "babel-jest": "^25.5.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "encoding": "^0.1.12",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "isomorphic-unfetch": "^3.0.0",
