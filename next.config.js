@@ -1,4 +1,7 @@
 module.exports = {
   exportTrailingSlash: true,
-  assetPrefix: "/yoello/",
+  assetPrefix: "/yoello",
+  exportPathMap: () => ({
+    "/": { page: "/" },
+  }),
 };
