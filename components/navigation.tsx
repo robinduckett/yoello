@@ -19,14 +19,22 @@ const NavigationItem = ({ category }) => {
 
   return (
     <GlobalContext.Consumer>
-      {({ state }) => (
-        <li
-          onClick={handleClick}
-          className={state.category === category.toLowerCase() ? "current" : ""}
-        >
-          {category}
-        </li>
-      )}
+      {({ state }) => {
+        if (state === null) {
+          return <></>;
+        }
+
+        return (
+          <li
+            onClick={handleClick}
+            className={
+              state.category === category.toLowerCase() ? "current" : ""
+            }
+          >
+            {category}
+          </li>
+        );
+      }}
     </GlobalContext.Consumer>
   );
 };
