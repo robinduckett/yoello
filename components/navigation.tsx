@@ -3,7 +3,6 @@ import * as React from "react";
 import { GlobalContext } from "../context/global";
 
 function setCategory(category: string) {
-  console.log("attempting to dispatch");
   return { type: "category", payload: category.toLowerCase() };
 }
 

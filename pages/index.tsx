@@ -2,6 +2,7 @@ import * as React from "react";
 
 import Head from "next/head";
 import Navigation from "../components/navigation";
+import Display from "../components/display";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
 
       <main>
         <Navigation />
+        <Display />
       </main>
     </div>
   );

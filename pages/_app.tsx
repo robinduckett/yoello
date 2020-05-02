@@ -15,6 +15,8 @@ class YoelloDemo extends App {
 const AppPage = ({ Component, pageProps }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  console.log(state);
+
   return (
     <GlobalContext.Provider value={{ state, dispatch }}>
       <Component {...pageProps} />
