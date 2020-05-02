@@ -6,7 +6,6 @@ export interface GlobalAction {
 }
 
 export interface GlobalState {
-  category: string;
   cart: {
     items: BeerRecord[];
   };
@@ -14,15 +13,11 @@ export interface GlobalState {
     by: string;
     dir: string;
   };
-  page: number,
 }
 
-let storedCategory: string;
 let storedItems: BeerRecord[];
 
 if (typeof localStorage !== 'undefined') {
-  storedCategory = localStorage.getItem('category');
-
   try {
     storedItems = JSON.parse(localStorage.getItem('cart')) as BeerRecord[];
   } catch (e) {
@@ -31,7 +26,6 @@ if (typeof localStorage !== 'undefined') {
 }
 
 export const initialState: GlobalState = {
-  category: storedCategory || 'pizza',
   cart: {
     items: storedItems || []
   },
@@ -39,22 +33,12 @@ export const initialState: GlobalState = {
     by: 'name',
     dir: 'asc'
   },
-  page: 1
 };
 
 export const reducer = (state: GlobalState, action: GlobalAction) => {
   let cart: GlobalState['cart'];
 
   switch (action.type) {
-    case "category":
-      const category = { category: action.payload };
-
-      localStorage.setItem('category', action.payload);
-
-      return {
-        ...state,
-        ...category,
-      }
     case "cart_add":
       const cartAdd = {
         cart: {
@@ -77,15 +61,6 @@ export const reducer = (state: GlobalState, action: GlobalAction) => {
       return {
         ...state,
         ...cartRemove,
-      }
-    case "page":
-      const page = {
-        page: action.payload,
-      }
-
-      return {
-        ...state,
-        ...page,
       }
     case "sort":
       const sort = {

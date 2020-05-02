@@ -1,54 +1,32 @@
 import * as React from "react";
 
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import AppBar from "@material-ui/core/AppBar";
+
 import { GlobalContext } from "../context/global";
 
 function setCategory(category: string) {
   return { type: "category", payload: category.toLowerCase() };
 }
 
-const NavigationItem = ({ category }) => {
-  const { dispatch } = React.useContext(GlobalContext);
+const Navigation = ({ value, onChange }) => {
+  const tabs = ["pizza", "steak", "all"];
 
-  const handleClick = React.useCallback(
-    (event: React.MouseEvent) => {
-      dispatch(setCategory(category));
-    },
-    [category]
-  );
-
-  return (
-    <GlobalContext.Consumer>
-      {({ state }) => {
-        if (state === null) {
-          return <></>;
-        }
-
-        return (
-          <li
-            onClick={handleClick}
-            className={
-              state.category === category.toLowerCase() ? "current" : ""
-            }
-          >
-            {category}
-          </li>
-        );
-      }}
-    </GlobalContext.Consumer>
-  );
-};
-
-const Navigation = () => {
-  const tabs = ["Pizza", "Steak", "All"];
+  const handleChange = (event: any, newValue: number) => {
+    if (newValue >= 0) {
+      onChange(newValue);
+    }
+  };
 
   return (
-    <nav>
-      <ul>
+    <AppBar position="sticky">
+      <Tabs value={value} onChange={handleChange} variant="fullWidth">
         {tabs.map((tab) => (
-          <NavigationItem category={tab} key={tab}></NavigationItem>
+          <Tab label={tab} />
         ))}
-      </ul>
-    </nav>
+      </Tabs>
+    </AppBar>
   );
 };
 

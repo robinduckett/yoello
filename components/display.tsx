@@ -1,7 +1,10 @@
 import { stringify, ParsedUrlQueryInput } from "querystring";
 
 import * as React from "react";
-import useSWR, { useSWRPages } from "swr";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+
+import useSWR from "swr";
 
 import fetch from "../libs/fetch";
 
@@ -9,9 +12,10 @@ import { GlobalContext } from "../context/global";
 import { GlobalState } from "../context/reducer";
 import { BeerRecord, BeerParams } from "../interfaces";
 
+import { BeerItem } from "./beer-item";
+
 function sortBeers({ by, dir }) {
   return function (a: any, b: any) {
-    console.log(a[by]);
     if (dir === "asc") {
       return a[by] < b[by] ? -1 : 1;
     } else {
@@ -20,25 +24,30 @@ function sortBeers({ by, dir }) {
   };
 }
 
-const BeerItem = ({ beer }) => (
-  <div key={beer.name} className="beer">
-    {beer.name}
-  </div>
-);
+const useStyles = makeStyles({
+  items: {
+    display: "flex",
+    "flex-direction": "column",
+  },
+});
 
-const Display = () => {
+const Display = ({ category }) => {
+  const [page, setPage] = React.useState(1);
+
+  const classes = useStyles();
+
   const context = React.useContext(GlobalContext);
   const state: GlobalState = context.state as GlobalState;
   const dispatch = context.dispatch;
 
   let params: BeerParams = {};
 
-  if (state.category !== "all") {
-    params.food = state.category;
+  if (category !== "all") {
+    params.food = category;
   }
 
-  if (state.page > 1) {
-    params.page = state.page;
+  if (page > 1) {
+    params.page = page;
   }
 
   const { data } = useSWR(
@@ -50,11 +59,9 @@ const Display = () => {
     return null;
   }
 
-  console.log(state);
-
   return (
     <div>
-      <div className="items">
+      <div className={classes.items}>
         {data !== undefined && data.length > 0
           ? data
               .sort(sortBeers(state.sort))
@@ -63,21 +70,9 @@ const Display = () => {
               ))
           : "End of results"}
       </div>
-      {state.page > 1 ? (
-        <button
-          onClick={() => dispatch({ type: "page", payload: state.page - 1 })}
-        >
-          Prev
-        </button>
-      ) : (
-        ""
-      )}
+      {page > 1 ? <Button onClick={() => setPage(page - 1)}>Prev</Button> : ""}
       {data.length === 25 ? (
-        <button
-          onClick={() => dispatch({ type: "page", payload: state.page + 1 })}
-        >
-          Next
-        </button>
+        <Button onClick={() => setPage(page + 1)}>Next</Button>
       ) : (
         ""
       )}
